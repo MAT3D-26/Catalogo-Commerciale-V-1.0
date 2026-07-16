@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAT3D — Catalogo Commerciale</title>
+<meta name="description" content="Catalogo commerciale MAT3D. Stampa 3D professionale, Dalle Ande alle Alpi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --graphite:#15181d;
+    --graphite-2:#1b1f26;
+    --graphite-3:#20252d;
+    --line:#2b313b;
+    --blue:#3a75a1;
+    --blue-lt:#5fa8d8;
+    --silver:#a3a6ad;
+    --ink:#eef1f4;
+    --ink-dim:#c7ccd3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--graphite);
+    color:var(--ink);
+    font-family:'Rajdhani',sans-serif;
+    overflow-x:hidden;
+  }
+  .layer-lines{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:repeating-linear-gradient(
+      to bottom,
+      rgba(163,166,173,0.05) 0px,
+      rgba(163,166,173,0.05) 1px,
+      transparent 1px,
+      transparent 14px
+    );
+    opacity:.6;
+  }
+  .wrap{position:relative; z-index:1}
+
+  /* ---------- NAV ---------- */
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:26px 6vw; max-width:1280px; margin:0 auto;
+  }
+  .brand{display:flex; align-items:center; gap:12px}
+  .brand img{height:38px; width:auto}
+  .brand span{font-family:'Orbitron'; font-weight:700; font-size:19px; letter-spacing:1px; color:var(--ink)}
+  .brand span b{color:var(--blue-lt); font-weight:800}
+  nav a{
+    font-family:'Rajdhani'; font-weight:600; font-size:15px; letter-spacing:.5px;
+    color:var(--ink-dim); text-decoration:none; text-transform:uppercase;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    max-width:1280px; margin:0 auto; padding:64px 6vw 40px;
+    display:grid; grid-template-columns:1.1fr .9fr; gap:60px; align-items:center;
+  }
+  .eyebrow{
+    font-family:'Rajdhani'; font-weight:700; font-size:13px; letter-spacing:4px;
+    color:var(--blue-lt); text-transform:uppercase; margin-bottom:18px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .eyebrow::before{content:''; width:28px; height:1px; background:var(--blue-lt)}
+  h1{
+    font-family:'Orbitron'; font-weight:800; font-size:clamp(34px,4.6vw,58px);
+    line-height:1.08; letter-spacing:.5px; color:var(--ink);
+  }
+  h1 em{font-style:normal; color:var(--blue-lt)}
+  .hero-sub{
+    margin-top:22px; font-size:19px; line-height:1.6; color:var(--ink-dim);
+    max-width:480px; font-weight:500;
+  }
+  .cta-row{display:flex; gap:16px; margin-top:36px; flex-wrap:wrap}
+  .btn{
+    font-family:'Rajdhani'; font-weight:700; font-size:16px; letter-spacing:1px;
+    text-transform:uppercase; text-decoration:none; padding:16px 30px;
+    border-radius:3px; display:inline-flex; align-items:center; gap:10px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{
+    background:linear-gradient(135deg,var(--blue-lt),var(--blue));
+    color:#0d1116; box-shadow:0 10px 30px -8px rgba(95,168,216,.55);
+  }
+  .btn-ghost{
+    border:1px solid var(--line); color:var(--ink);
+    background:rgba(255,255,255,.02);
+  }
+  .btn-ghost:hover{border-color:var(--blue-lt); color:var(--blue-lt)}
+
+  /* ---------- FAN PREVIEW ---------- */
+  .fan{
+    position:relative; height:440px; display:flex; align-items:center; justify-content:center;
+  }
+  .fan img{
+    position:absolute; width:270px; border-radius:6px;
+    box-shadow:0 30px 60px -18px rgba(0,0,0,.7);
+    border:1px solid rgba(255,255,255,.06);
+    transition:transform .35s ease;
+  }
+  .fan img:nth-child(1){transform:rotate(-11deg) translate(-90px,10px); z-index:1}
+  .fan img:nth-child(2){transform:rotate(-3deg) translate(-30px,-6px); z-index:2}
+  .fan img:nth-child(3){transform:rotate(6deg) translate(40px,4px); z-index:3}
+  .fan img:nth-child(4){transform:rotate(14deg) translate(100px,16px); z-index:2}
+  .fan:hover img:nth-child(1){transform:rotate(-15deg) translate(-110px,4px)}
+  .fan:hover img:nth-child(2){transform:rotate(-5deg) translate(-40px,-16px)}
+  .fan:hover img:nth-child(3){transform:rotate(8deg) translate(50px,-6px)}
+  .fan:hover img:nth-child(4){transform:rotate(18deg) translate(120px,10px)}
+
+  /* ---------- STRIP ---------- */
+  .strip{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    background:var(--graphite-2);
+    padding:22px 6vw; margin-top:40px;
+  }
+  .strip-inner{
+    max-width:1280px; margin:0 auto; display:flex; justify-content:space-between;
+    flex-wrap:wrap; gap:18px;
+  }
+  .stat{display:flex; align-items:baseline; gap:10px}
+  .stat b{font-family:'Orbitron'; font-size:22px; color:var(--blue-lt); font-weight:700}
+  .stat span{font-size:14px; letter-spacing:1px; color:var(--silver); text-transform:uppercase}
+
+  /* ---------- VIEWER SECTION ---------- */
+  .viewer{
+    max-width:1280px; margin:100px auto 0; padding:0 6vw;
+  }
+  .section-head{max-width:640px; margin-bottom:40px}
+  .section-head .eyebrow{margin-bottom:14px}
+  .section-head h2{
+    font-family:'Orbitron'; font-weight:700; font-size:clamp(24px,3vw,34px); color:var(--ink);
+  }
+  .section-head p{margin-top:14px; color:var(--ink-dim); font-size:17px; line-height:1.6}
+
+  .frame-wrap{
+    background:var(--graphite-3); border:1px solid var(--line); border-radius:8px;
+    padding:14px; box-shadow:0 40px 80px -30px rgba(0,0,0,.6);
+  }
+  .frame-bar{
+    display:flex; align-items:center; gap:8px; padding:6px 10px 16px;
+  }
+  .frame-bar i{width:10px; height:10px; border-radius:50%; background:var(--line)}
+  .frame-bar span{
+    margin-left:auto; font-size:13px; color:var(--silver); letter-spacing:.5px;
+  }
+  embed, iframe{
+    width:100%; height:78vh; min-height:480px; border:none; border-radius:4px;
+    background:#0d1013;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    margin-top:100px; padding:50px 6vw 40px; border-top:1px solid var(--line);
+    text-align:center;
+  }
+  footer img{height:64px; margin-bottom:16px; opacity:.9}
+  .claim{
+    font-family:'Rajdhani'; font-style:italic; font-weight:600; letter-spacing:1px;
+    color:var(--silver); font-size:15px;
+  }
+  .footer-brand{
+    font-family:'Orbitron'; font-weight:700; font-size:16px; color:var(--ink); margin-top:10px;
+  }
+  .footer-brand b{color:var(--blue-lt)}
+
+  @media (max-width: 860px){
+    .hero{grid-template-columns:1fr; padding-top:40px}
+    .fan{height:300px; order:-1}
+    .fan img{width:190px}
+    .fan img:nth-child(1){transform:rotate(-11deg) translate(-55px,6px)}
+    .fan img:nth-child(2){transform:rotate(-3deg) translate(-18px,-4px)}
+    .fan img:nth-child(3){transform:rotate(6deg) translate(24px,2px)}
+    .fan img:nth-child(4){transform:rotate(14deg) translate(60px,10px)}
+    nav a{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="layer-lines"></div>
+<div class="wrap">
+
+  <nav>
+    <div class="brand">
+      <img src="assets/logo.png" alt="MAT3D">
+      <span>MAT<b>3D</b></span>
+    </div>
+    <a href="#catalogo">Vai al catalogo</a>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Catalogo commerciale ufficiale</div>
+      <h1>Dalle Ande<br>alle <em>Alpi.</em></h1>
+      <p class="hero-sub">Stampa 3D professionale, progettazione su misura e articoli personalizzati. Sfoglia il catalogo completo MAT3D, direttamente dal tuo telefono.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#catalogo">Visualizza il catalogo</a>
+        <a class="btn btn-ghost" href="assets/MAT3D_catalogo.pdf" download>Scarica il PDF</a>
+      </div>
+    </div>
+    <div class="fan">
+      <img src="assets/preview-1.jpg" alt="Copertina catalogo MAT3D">
+      <img src="assets/preview-4.jpg" alt="Decorazione e Casa">
+      <img src="assets/preview-2.jpg" alt="Articoli Personalizzati">
+      <img src="assets/preview-3.jpg" alt="Soluzioni in TPU">
+    </div>
+  </section>
+
+  <div class="strip">
+    <div class="strip-inner">
+      <div class="stat"><b>10</b><span>Pagine</span></div>
+      <div class="stat"><b>PETG · ASA · TPU</b><span>Materiali</span></div>
+      <div class="stat"><b>AR · IT</b><span>Origine</span></div>
+      <div class="stat"><b>100%</b><span>Su misura</span></div>
+    </div>
+  </div>
+
+  <section class="viewer" id="catalogo">
+    <div class="section-head">
+      <div class="eyebrow">Catalogo completo</div>
+      <h2>Sfoglia online o scarica il PDF</h2>
+      <p>Il visualizzatore qui sotto funziona direttamente nel browser. Se preferisci, puoi scaricare il file per consultarlo offline o condividerlo.</p>
+    </div>
+    <div class="frame-wrap">
+      <div class="frame-bar"><i></i><i></i><i></i><span>MAT3D_catalogo.pdf</span></div>
+      <embed src="assets/MAT3D_catalogo.pdf" type="application/pdf">
+    </div>
+    <div class="cta-row" style="margin-top:26px">
+      <a class="btn btn-primary" href="assets/MAT3D_catalogo.pdf" download>Scarica il PDF</a>
+      <a class="btn btn-ghost" href="assets/MAT3D_catalogo.pdf" target="_blank" rel="noopener">Apri in una nuova scheda</a>
+    </div>
+  </section>
+
+  <footer>
+    <img src="assets/logo.png" alt="MAT3D">
+    <div class="claim">Dalle Ande alle Alpi</div>
+    <div class="footer-brand">MAT<b>3D</b></div>
+  </footer>
+
+</div>
+</body>
+</html>
